@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<h1>Search results for: {{query}}</h1>
+  {% if products %}
+  <table class='table'>
+    <thead>
+      <th></th>
+      <th>Product</th>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        {% if p.images.all %}
+          {% for item in p.images.all %}
+          {% if item.featured %}
+            <td style="width:200px;height:200px;
+            background: url({{ item.image.url }});
+            background-repeat:none;
+            background-size: cover;
+            margin: 0 auto;"></td>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+            <td style="
+            width:200px;
+            height:200px;
+            background: url({% static 'images/download.svg' %});
+            background-repeat:none;
+            background-size: cover;
+            margin: 0 auto;"></td>
+        {% endif %}
+        <td><a href="{% url 'products:single_product' pk=p.pk %}">{{ p.title }}</a><p>{{ p.price }}</p></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  {% else %}
+    <h3>No results found</h3>
+  {% endif %}
+{% endblock %}

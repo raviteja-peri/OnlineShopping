@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Your order has been {{order.status}}</h1>
+<p>Order Details</p>
+<ul>
+  <li>{{order.order_id}}</li>
+  <li>{{order.timestamp}}</li>
+</ul>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+{% if empty %}
+<h1 style='text-align:center'>{{ empty_message }}</h1>
+{% else %}
+<div class="container">
+  <table class='table table-hover'>
+    <thead class='thead-dark'>
+      <th>#</th>
+      <th>Item</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th></th>
+    </thead>
+    {% for item in cart.cartitems.all %}
+      <tr>
+        <th scope='row'>{{ forloop.counter }}</th>
+        <td>{{ item.product.title }}{% if item.variations.all %}<ul>
+          {% for i in item.variations.all %}
+            <li>{{ i.category|capfirst }} : {{ i.title|capfirst }}</li>
+          {% endfor %}
+        </ul> {% endif %}</td>
+        <td>{{ item.product.price }}</td>
+        <td>{{ item.quantity }}</td>
+        <td><a href="{% url 'carts:remove_cart' id=item.id %}" class='btn btn-danger'>Remove</a></td>
+      </tr>
+    {% endfor %}
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total: {{ cart.total }} <br><p><a class='btn btn-warning' href="{% url 'products:productlist' %}">Continue Shopping</a> <a href="{% url 'orders:cart_checkout' %}" class='btn btn-success'>Checkout</a></p></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

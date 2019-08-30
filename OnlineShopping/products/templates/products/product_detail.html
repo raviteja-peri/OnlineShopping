@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+          {% for item in product.images.all %}
+          {% if item.featured %}
+            <img width=300 height=3 00 src="{{item.image.url}}" class="img-fluid" alt="{% static 'images/download.svg' %}">
+          {% endif %}
+          {% endfor %}
+          <hr>
+          <div class="row">
+            {% for item in product.images.all %}
+            {% if not item.featured %}
+            <div class="col-sm-4">
+              <img width=200 height=200 src="{{item.image.url}}" class='img-thumbnail' alt="...">
+            </div>
+          {% endif %}
+          {% endfor %}
+          </div>
+    </div>
+    <div class="col-md-6">
+      <h1>{{product.title}}</h1>
+      <!-- <a href="{% url 'carts:update_cart' slug=product.slug %}" class='btn btn-warning float-right'>Add to Cart</a> -->
+      <form class="form-group" action="{% url 'carts:update_cart' slug=product.slug %}" method="POST">{% csrf_token %}
+        <div class="form-row align items-center">
+          <div class="col-auto">
+            <input class='form-control form-control-sm' type="number" name="qty" value="1">
+          </div>
+          <!-- <div class="col-auto">
+            <select class='form-control form-control-sm' name='color'>
+              <option value="black">Black</option>
+              <option value="blue">Blue</option>
+              <option value="orange">Orange</option>
+            </select>
+          </div> -->
+          {% if product.variations.all %}
+          {% if product.variations.colors %}
+          <div class="col-auto">
+            <select class='form-control form-control-sm' name='color'>
+              {% for item in product.variations.colors %}
+              <option value="{{ item.title|lower }}">{{ item.title|capfirst}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endif %}
+          {% if product.variations.sizes %}
+          <div class="col-auto">
+            <select class='form-control form-control-sm' name='size'>
+              {% for item in product.variations.sizes %}
+              <option value="{{ item.title|lower }}">{{ item.title|capfirst}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endif %}
+          {% endif %}
+          <div class="col-auto">
+            <input class='btn btn-warning form-   control btn-strong' type="submit" name="Submit" value="Add to Cart">
+          </div>
+        </div>
+      </form>
+      <hr>
+      <p>Price: ${{product.price}}</p>
+      <hr>
+      <p>{{product.description|linebreaks}}</p>
+    </div>
+  </div>
+
+{% endblock %}

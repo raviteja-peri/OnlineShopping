@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2 col-sm-offset-1 blog-sidebar">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="{% url 'products:productlist' %}">All</a></li>
+        {% for c in categories %}
+          <li><a href="{% url 'products:products' slug=c.slug %}">{{ c.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-sm-10">
+    <div class="row">
+    {% for p in products %}
+      <div class="col-sm-3">
+        <div class="card" style="width: 16rem;">
+        {% if p.images.all %}
+          {% for item in p.images.all %}
+          {% if item.featured %}
+          <div style="
+          width:150px;
+          height:150px;
+          background: url({{item.image.url}});
+          background-repeat:none;
+          background-size: cover;
+          margin: 0 auto;">
+
+          </div>
+          <!-- <img width=200px height=200px class='img-fluid' src="{{item.image.url}}" class="card-img-top" alt=''> -->
+          {% endif %}
+          {% endfor %}
+        {% else %}
+        <div style="
+        width:150px;
+        height:150px;
+        background: url({% static 'images/download.svg' %});
+        background-repeat:none;
+        background-size: cover;
+        margin: 0 auto;">
+
+        </div>
+        <!-- <img  width=200 height=200 class='img-fluid' src="{% static 'images/download.svg' %}" class="card-img-top" alt=''/> -->
+        {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{p.title}}</h5>
+                <p class="card-text">${{p.price}}</p>
+                <a href="{% url 'products:single_product' pk=p.pk %}" class="btn btn-primary">View Product</a>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+      </div>
+      </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
